@@ -7,9 +7,9 @@
       class="writing-box"
       :width="canvasWidth"
       :height="canvasHeight"
-      @mousedown="onDown"
-      @mousemove="onMouseMove"
-      @mouseup="onMouseUp"
+      @touchstart="onStart"
+      @touchmove="onMove"
+      @touchend="onEnd"
     >
     </canvas>
     <div class="btn-box">
@@ -45,9 +45,7 @@ export default {
       filePath: "",
       // 辅助坐标
       c1px: 0,
-      c1py: 0,
-      // 鼠标辅助
-      isDown: false
+      c1py: 0
     };
   },
   mounted() {
@@ -65,14 +63,17 @@ export default {
       if (this.path !== "") {
         this.filePath = this.path;
       }
+      this.canvasWidth *= 8;
+      this.canvasHeight *= 8;
+      this.ctx.scale(8, 8);
     },
     handleDraw(e) {
       // 获取点击点的坐标
-      let x = e.x - this.offsetLeft;
-      let y = e.y - this.offsetTop;
+      let x = e.touches[0].clientX - this.offsetLeft;
+      let y = e.touches[0].clientY - this.offsetTop;
       // 绘制
-      this.ctx.moveTo(this.c1px, this.c1py);
-      this.ctx.lineTo(x, y);
+      this.ctx.moveTo(this.c1px * 8, this.c1py * 8);
+      this.ctx.lineTo(x * 8, y * 8);
       this.ctx.stroke();
       this.c1px = x;
       this.c1py = y;
@@ -83,7 +84,7 @@ export default {
       this.offsetLeft = e.target.offsetLeft;
       this.offsetTop = e.target.offsetTop;
       this.ctx.beginPath();
-      this.ctx.lineWidth = this.lineWidth;
+      this.ctx.lineWidth = this.lineWidth * 8;
       this.ctx.strokeStyle = this.lineColor;
       this.ctx.lineCap = "round";
       this.ctx.lineJoin = "round";
@@ -118,28 +119,6 @@ export default {
         // 生成图片的回调
         this.$emit("onComplete", this.filePath);
       }
-    },
-    onDown(e) {
-      this.isDown = true;
-      this.offsetLeft = e.target.offsetLeft;
-      this.offsetTop = e.target.offsetTop;
-      this.ctx.beginPath();
-      this.ctx.lineWidth = this.lineWidth;
-      this.ctx.strokeStyle = this.lineColor;
-      this.ctx.lineCap = "round";
-      this.ctx.lineJoin = "round";
-      this.c1px = e.x - this.offsetLeft;
-      this.c1py = e.y - this.offsetTop;
-      this.handleDraw(e);
-    },
-    onMouseMove(e) {
-      if (this.isDown) {
-        this.handleDraw(e);
-      }
-    },
-    onMouseUp() {
-      this.isDown = false;
-      this.ctx.closePath();
     }
   }
 };
