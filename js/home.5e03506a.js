@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["home"],{"16c0":function(n,e,t){"use strict";t.r(e);var i=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",{staticClass:"home"},[n._v("\n    这是首页\n    "),t("div",{on:{click:n.onCickPush}},[n._v("写字板")])])},o=[],s={name:"home",methods:{onCickPush:function(){this.$router.push("/hand-writing")}}},c=s,u=t("2877"),a=Object(u["a"])(c,i,o,!1,null,null,null);e["default"]=a.exports}}]);
+//# sourceMappingURL=home.5e03506a.js.map
