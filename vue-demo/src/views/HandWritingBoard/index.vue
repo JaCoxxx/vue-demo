@@ -42,7 +42,10 @@ export default {
       // 线条颜色
       lineColor: "#000",
       // 图片地址
-      filePath: ""
+      filePath: "",
+      // 辅助坐标
+      c1px: 0,
+      c1py: 0
     };
   },
   mounted() {
@@ -66,8 +69,11 @@ export default {
       let x = e.touches[0].clientX - this.offsetLeft;
       let y = e.touches[0].clientY - this.offsetTop;
       // 绘制
+      this.ctx.moveTo(this.c1px, this.c1py);
       this.ctx.lineTo(x, y);
       this.ctx.stroke();
+      this.c1px = x;
+      this.c1py = y;
     },
     // 开始触摸
     onStart(e) {
@@ -79,6 +85,8 @@ export default {
       this.ctx.strokeStyle = this.lineColor;
       this.ctx.lineCap = "round";
       this.ctx.lineJoin = "round";
+      this.c1px = e.touches[0].clientX - this.offsetLeft;
+      this.c1py = e.touches[0].clientY - this.offsetTop;
       this.handleDraw(e);
     },
     // 移动
