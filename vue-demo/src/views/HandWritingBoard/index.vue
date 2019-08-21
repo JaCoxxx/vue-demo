@@ -7,9 +7,9 @@
       class="writing-box"
       :width="canvasWidth"
       :height="canvasHeight"
-      @touchstart="onStart"
-      @touchmove="onMove"
-      @touchend="onEnd"
+      @mousedown="onDown"
+      @mousemove="onMouseMove"
+      @mouseup="onMouseUp"
     >
     </canvas>
     <div class="btn-box">
@@ -45,7 +45,9 @@ export default {
       filePath: "",
       // 辅助坐标
       c1px: 0,
-      c1py: 0
+      c1py: 0,
+      // 鼠标辅助
+      isDown: false
     };
   },
   mounted() {
@@ -66,8 +68,8 @@ export default {
     },
     handleDraw(e) {
       // 获取点击点的坐标
-      let x = e.touches[0].clientX - this.offsetLeft;
-      let y = e.touches[0].clientY - this.offsetTop;
+      let x = e.x - this.offsetLeft;
+      let y = e.y - this.offsetTop;
       // 绘制
       this.ctx.moveTo(this.c1px, this.c1py);
       this.ctx.lineTo(x, y);
@@ -116,6 +118,28 @@ export default {
         // 生成图片的回调
         this.$emit("onComplete", this.filePath);
       }
+    },
+    onDown(e) {
+      this.isDown = true;
+      this.offsetLeft = e.target.offsetLeft;
+      this.offsetTop = e.target.offsetTop;
+      this.ctx.beginPath();
+      this.ctx.lineWidth = this.lineWidth;
+      this.ctx.strokeStyle = this.lineColor;
+      this.ctx.lineCap = "round";
+      this.ctx.lineJoin = "round";
+      this.c1px = e.x - this.offsetLeft;
+      this.c1py = e.y - this.offsetTop;
+      this.handleDraw(e);
+    },
+    onMouseMove(e) {
+      if (this.isDown) {
+        this.handleDraw(e);
+      }
+    },
+    onMouseUp() {
+      this.isDown = false;
+      this.ctx.closePath();
     }
   }
 };
