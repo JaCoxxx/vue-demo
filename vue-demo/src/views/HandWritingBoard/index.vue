@@ -58,22 +58,24 @@ export default {
       const canvas = this.$refs.writingCanvas;
       this.canvasWidth = canvas.offsetWidth;
       this.canvasHeight = canvas.offsetHeight;
+      if (window.devicePixelRatio) {
+        this.canvasWidth *= window.devicePixelRatio;
+        this.canvasHeight *= window.devicePixelRatio;
+      }
       // 获取context对象
       this.ctx = canvas.getContext("2d");
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
       if (this.path !== "") {
         this.filePath = this.path;
       }
-      this.canvasWidth *= 8;
-      this.canvasHeight *= 8;
-      this.ctx.scale(8, 8);
     },
     handleDraw(e) {
       // 获取点击点的坐标
       let x = e.touches[0].clientX - this.offsetLeft;
       let y = e.touches[0].clientY - this.offsetTop;
       // 绘制
-      this.ctx.moveTo(this.c1px * 8, this.c1py * 8);
-      this.ctx.lineTo(x * 8, y * 8);
+      this.ctx.moveTo(this.c1px, this.c1py);
+      this.ctx.lineTo(x, y);
       this.ctx.stroke();
       this.c1px = x;
       this.c1py = y;
@@ -84,7 +86,7 @@ export default {
       this.offsetLeft = e.target.offsetLeft;
       this.offsetTop = e.target.offsetTop;
       this.ctx.beginPath();
-      this.ctx.lineWidth = this.lineWidth * 8;
+      this.ctx.lineWidth = this.lineWidth;
       this.ctx.strokeStyle = this.lineColor;
       this.ctx.lineCap = "round";
       this.ctx.lineJoin = "round";
@@ -104,11 +106,11 @@ export default {
     onClear() {
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
       this.filePath = "";
-      // 清除的回调
-      this.$emit("onClear");
       this.$nextTick(() => {
         this.init();
       });
+      // 清除的回调
+      this.$emit("onClear");
     },
     // 点击确认
     onGenerate() {
