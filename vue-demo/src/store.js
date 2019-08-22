@@ -11,6 +11,12 @@ export default new Vuex.Store({
         path: "/hand-writing",
         description: "移动端手写板插件，无额外功能。",
         phone: true
+      },
+      {
+        name: "手写板2.0",
+        path: "/hand-writing2",
+        description: "移动端手写板插件，增加更改画笔粗细，画笔颜色功能。",
+        phone: true
       }
     ]
   },

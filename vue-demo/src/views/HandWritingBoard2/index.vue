@@ -13,13 +13,46 @@
     >
     </canvas>
     <div class="btn-box">
-      <div class="btn btn-clear" @click="onClear">清屏</div>
-      <div class="btn btn-generate" @click="onGenerate">生成</div>
+      <!-- 调节弹框 -->
+      <a-popover v-model="adjustVisible">
+        <template slot="title">
+          <div class="adjust-header">
+            <span>调节笔画</span>
+            <a-icon type="close-circle" @click="adjustVisible = false" />
+          </div>
+        </template>
+        <template slot="content">
+          <div class="adjust-content">
+            <a-row>
+              <a-col :span="8">线条粗细</a-col>
+              <a-col :span="16">
+                <a-slider :min="1" :max="20" v-model="lineWidth" />
+              </a-col>
+            </a-row>
+            <chrome-picker v-model="pickerColor" />
+          </div>
+        </template>
+        <a-button
+          type="primary"
+          class="btn btn-adjust"
+          @click="adjustVisible = true"
+        >
+          调节笔画
+        </a-button>
+      </a-popover>
+
+      <a-button type="primary" class="btn btn-clear" @click="onClear"
+        >清屏</a-button
+      >
+      <a-button type="primary" class="btn btn-generate" @click="onGenerate"
+        >生成</a-button
+      >
     </div>
   </div>
 </template>
 
 <script>
+import { Chrome } from "vue-color";
 export default {
   name: "HandWriting",
   props: {
@@ -27,6 +60,9 @@ export default {
       type: String,
       default: ""
     }
+  },
+  components: {
+    "chrome-picker": Chrome
   },
   data: function() {
     return {
@@ -39,14 +75,23 @@ export default {
       canvasHeight: 500,
       // 线条宽度
       lineWidth: 10,
+      // 调色板颜色
+      pickerColor: {},
       // 线条颜色
       lineColor: "#000",
       // 图片地址
       filePath: "",
       // 辅助坐标
       c1px: 0,
-      c1py: 0
+      c1py: 0,
+      adjustVisible: false
     };
+  },
+  watch: {
+    pickerColor: function(now) {
+      console.log(now, this);
+      this.lineColor = now.hex8;
+    }
   },
   mounted() {
     this.init();
@@ -133,29 +178,34 @@ export default {
     margin: 0 auto;
     width: 100%;
     height: 80%;
-    background: #ccc;
 }
 .btn-box {
+  border-top: 1px solid #000;
   margin: 0 auto;
-  width: 300px;
+  padding-top: 10px;
   height: 20%;
 }
 .btn {
-  box-sizing: border-box;
-  margin: 20px 25px;
-  display: inline-block;
+  margin: 0 15px;
   width: 100px;
   height: 50px;
-  border: 1px solid #1890ff;
-  border-radius: 10px;
-  background: #1890ff;
-  color: #fff;
-  text-align: center;
   line-height: 50px;
 }
 
-.btn:active {
-  background: #fff;
-  color: #000;
+.adjust-header {
+    display: flex;
+}
+
+.adjust-header span {
+    flex: 1;
+}
+
+.adjust-header .anticon{
+    flex: 1;
+    text-align: right;
+    line-height: 21px;
+}
+.ant-row {
+    line-height: 36px;
 }
 </style>

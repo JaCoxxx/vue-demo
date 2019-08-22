@@ -27,8 +27,7 @@ export default {
     }
   },
   watch: {
-    $route: function(to, from) {
-      console.log(this.$route.path, to, from);
+    $route: function() {
       this.header =
         this.$route.path === "/"
           ? {
@@ -40,7 +39,7 @@ export default {
         this.$route.path === "/"
           ? "DEMO列表"
           : this.demoList.find(item => item.path === this.$route.path).name
-      } | JaCo的小站`;
+      } | JaCo的DEMO库`;
     }
   },
   created() {

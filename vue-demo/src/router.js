@@ -15,6 +15,12 @@ export default new Router({
       name: "handWriting",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/HandWritingBoard")
+    },
+    {
+      path: "/hand-writing2",
+      name: "handWriting2",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/HandWritingBoard2")
     }
   ]
 });
