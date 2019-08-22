@@ -1,8 +1,58 @@
 <template>
   <div id="app">
-    <router-view />
+    <div class="header">
+      <a-icon v-if="!header.home" class="icon" type="left" @click="goBack" />
+      <span>{{ header.name }}</span>
+    </div>
+    <div class="body">
+      <router-view />
+    </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: "App",
+  data() {
+    return {
+      header: {
+        name: "VUE-DEMO列表",
+        home: true
+      }
+    };
+  },
+  computed: {
+    demoList() {
+      return this.$store.state.demoList;
+    }
+  },
+  watch: {
+    $route: function(to, from) {
+      console.log(this.$route.path, to, from);
+      this.header =
+        this.$route.path === "/"
+          ? {
+              name: "VUE-DEMO列表",
+              home: true
+            }
+          : this.demoList.find(item => item.path === this.$route.path);
+      document.title = `${
+        this.$route.path === "/"
+          ? "DEMO列表"
+          : this.demoList.find(item => item.path === this.$route.path).name
+      } | JaCo的小站`;
+    }
+  },
+  created() {
+    console.log(this.$route.path);
+  },
+  methods: {
+    goBack() {
+      this.$router.go(-1);
+    }
+  }
+};
+</script>
 
 <style>
 body,
@@ -110,5 +160,23 @@ body,
 #app {
   width: 100%;
   height: 100%;
+}
+.header {
+  position: relative;
+  width: 100%;
+  height: 38px;
+  background: #1890ff;
+  text-align: center;
+  line-height: 38px;
+}
+.icon {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+}
+.body {
+  width: 100%;
+  height: calc(100vh - 38px);
+  overflow-y: auto;
 }
 </style>
