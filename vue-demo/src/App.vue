@@ -1,8 +1,32 @@
 <template>
   <div id="app">
     <div class="header">
-      <a-icon v-if="!header.home" class="icon" type="left" @click="goBack" />
-      <span>{{ header.name }}</span>
+      <div v-if="!search">
+        <a-icon v-if="!header.home" class="icon" type="left" @click="goBack" />
+        <span>{{ header.name }}</span>
+        <a
+          v-if="!header.home && header.source"
+          :href="header.source"
+          target="_black"
+          class="link"
+        >
+          <a-icon type="github" />
+        </a>
+        <a-icon
+          v-if="header.home"
+          class="icon-r"
+          type="search"
+          @click="search = true"
+        />
+      </div>
+      <div v-else>
+        <a-input-search
+          placeholder="搜索DEMO"
+          style="width: 80%"
+          @search="onSearch"
+        />
+        <span class="cancel" @click="onCancel">取消</span>
+      </div>
     </div>
     <div class="body">
       <router-view />
@@ -11,6 +35,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "App",
   data() {
@@ -18,7 +43,8 @@ export default {
       header: {
         name: "VUE-DEMO列表",
         home: true
-      }
+      },
+      search: false
     };
   },
   computed: {
@@ -46,8 +72,18 @@ export default {
     console.log(this.$route.path);
   },
   methods: {
+    ...mapActions(["setSearchList"]),
     goBack() {
       this.$router.push("/");
+    },
+    onSearch(value) {
+      let _data = this.demoList.filter(item => item.name.includes(value));
+      _data = _data.length ? _data : [{ name: "暂无搜索结果" }];
+      this.setSearchList(_data);
+    },
+    onCancel() {
+      this.search = false;
+      this.setSearchList([]);
     }
   }
 };
@@ -119,7 +155,10 @@ a {
   color: #555;
   text-decoration: none;
 }
-a:hover {
+a:hover,
+a:active,
+a:link {
+  color: #000 !important;
   text-decoration: underline;
 }
 img {
@@ -173,9 +212,35 @@ body,
   top: 12px;
   left: 10px;
 }
+.link {
+  position: absolute;
+  right: 12px;
+  width: 20px;
+  height: 38px;
+  line-height: 38px;
+  color: #000;
+  transform: scale(1.2, 1.2);
+}
+.icon-r {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
 .body {
   width: 100%;
   height: calc(100vh - 38px);
   overflow-y: auto;
+}
+.header .ant-input-search .ant-input {
+  border: 0;
+  border-bottom: 1px solid #000;
+  border-radius: 0;
+  background: transparent;
+}
+.cancel {
+  float: right;
+  margin-right: 10px;
+  height: 38px;
+  line-height: 38px;
 }
 </style>

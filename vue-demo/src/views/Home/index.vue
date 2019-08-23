@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <a-list bordered :dataSource="data">
+    <a-list bordered :dataSource="searchList.length ? searchList : data">
       <a-list-item
         slot="renderItem"
         slot-scope="item"
@@ -29,6 +29,9 @@ export default {
   computed: {
     data() {
       return this.$store.state.demoList;
+    },
+    searchList() {
+      return this.$store.state.searchList;
     }
   },
   created() {
