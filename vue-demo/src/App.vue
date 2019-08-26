@@ -203,11 +203,13 @@ body,
   position: relative;
   width: 100%;
   height: 38px;
-  background: #1890ff;
+  background: #000;
+  color: #fff;
   text-align: center;
   line-height: 38px;
 }
 .icon {
+  color: #fff;
   position: absolute;
   top: 12px;
   left: 10px;
@@ -218,10 +220,11 @@ body,
   width: 20px;
   height: 38px;
   line-height: 38px;
-  color: #000;
+  color: #fff;
   transform: scale(1.2, 1.2);
 }
 .icon-r {
+  color: #fff;
   position: absolute;
   right: 12px;
   top: 12px;
@@ -236,6 +239,10 @@ body,
   border-bottom: 1px solid #000;
   border-radius: 0;
   background: transparent;
+  color: #fff;
+}
+.header .ant-input-search .ant-input-search-icon {
+  color: #fff;
 }
 .cancel {
   float: right;

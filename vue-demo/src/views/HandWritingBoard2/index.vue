@@ -1,5 +1,5 @@
 <template>
-  <div class="hand-writing">
+  <div ref="box" class="hand-writing">
     <img v-if="filePath" :src="filePath" alt="" />
     <canvas
       v-else
@@ -7,14 +7,18 @@
       class="writing-box"
       :width="canvasWidth"
       :height="canvasHeight"
-      @touchstart="onStart"
-      @touchmove="onMove"
-      @touchend="onEnd"
+      @touchstart="handleSelectTouch($event, 'start')"
+      @touchmove="handleSelectTouch($event, 'move')"
+      @touchend="handleSelectTouch($event, 'end')"
     >
     </canvas>
     <div class="btn-box">
       <!-- 调节弹框 -->
-      <a-popover v-model="adjustVisible">
+      <a-popover
+        v-model="adjustVisible"
+        :arrowPointAtCenter="true"
+        :getPopupContainer="handleGetContainer"
+      >
         <template slot="title">
           <div class="adjust-header">
             <span>调节笔画</span>
@@ -29,7 +33,24 @@
                 <a-slider :min="1" :max="20" v-model="lineWidth" />
               </a-col>
             </a-row>
-            <chrome-picker v-model="pickerColor" />
+            <a-row>
+              <a-col :span="8">线条颜色</a-col>
+              <a-col :span="16">
+                <div
+                  class="color-body"
+                  :style="{ background: lineColor }"
+                  @click="colorVisible = true"
+                ></div>
+                <div class="picker-box" v-if="colorVisible">
+                  <a-icon
+                    class="picker-cancel"
+                    type="close-circle"
+                    @click="colorVisible = false"
+                  />
+                  <chrome-picker v-model="pickerColor" />
+                </div>
+              </a-col>
+            </a-row>
           </div>
         </template>
         <a-button
@@ -47,6 +68,14 @@
       <a-button type="primary" class="btn btn-generate" @click="onGenerate"
         >生成</a-button
       >
+      <a-button
+        type="primary"
+        class="btn btn-switch"
+        style="padding: 0"
+        @click="mouseStatus = mouseStatus === 'brush' ? 'eraser' : 'brush'"
+      >
+        切换为{{ mouseStatus === "brush" ? "橡皮檫" : "画笔" }}
+      </a-button>
     </div>
   </div>
 </template>
@@ -84,12 +113,14 @@ export default {
       // 辅助坐标
       c1px: 0,
       c1py: 0,
-      adjustVisible: false
+      adjustVisible: false,
+      colorVisible: false,
+      // 鼠标状态: brush eraser
+      mouseStatus: "brush"
     };
   },
   watch: {
     pickerColor: function(now) {
-      console.log(now, this);
       this.lineColor = now.hex8;
     }
   },
@@ -109,6 +140,23 @@ export default {
         this.filePath = this.path;
       }
     },
+    // 判断画笔属性
+    handleSelectTouch(e, type) {
+      let _data = this.getInitialCapital(this.mouseStatus);
+      switch (type) {
+        case "start":
+          this[`on${_data}Start`](e);
+          break;
+        case "move":
+          this[`on${_data}Move`](e);
+          break;
+        case "end":
+          this[`on${_data}End`](e);
+          break;
+        default:
+          break;
+      }
+    },
     handleDraw(e) {
       // 获取点击点的坐标
       let x = e.touches[0].clientX - this.offsetLeft;
@@ -121,7 +169,7 @@ export default {
       this.c1py = y;
     },
     // 开始触摸
-    onStart(e) {
+    onBrushStart(e) {
       // 获取偏移量
       this.offsetLeft = e.target.offsetLeft;
       this.offsetTop = e.target.offsetTop;
@@ -135,11 +183,11 @@ export default {
       this.handleDraw(e);
     },
     // 移动
-    onMove(e) {
+    onBrushMove(e) {
       this.handleDraw(e);
     },
     // 停止触摸
-    onEnd() {
+    onBrushEnd() {
       this.ctx.closePath();
     },
     // 点击取消
@@ -161,6 +209,62 @@ export default {
         // 生成图片的回调
         this.$emit("onComplete", this.filePath);
       }
+    },
+
+    onEraserStart(e) {
+      this.offsetLeft = e.target.offsetLeft;
+      this.offsetTop = e.target.offsetTop;
+      this.c1px = e.touches[0].clientX - this.offsetLeft;
+      this.c1py = e.touches[0].clientY - this.offsetTop;
+      this.clearArc(this.c1px, this.c1py, this.lineWidth / 2);
+      // this.clearArc(e, this.lineWidth / 2);
+    },
+    onEraserMove(e) {
+      this.clearLine(e, this.lineWidth / 2);
+    },
+    onEraserEnd() {
+      console.log("end");
+    },
+    clearArc(x, y, radius) {
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
+      this.ctx.clip();
+      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+      this.ctx.restore();
+    },
+    clearLine(e, radius) {
+      this.offsetLeft = e.target.offsetLeft;
+      this.offsetTop = e.target.offsetTop;
+      let endX = e.touches[0].clientX - this.offsetLeft;
+      let endY = e.touches[0].clientY - this.offsetTop;
+      this.clearArc(endX, endY, radius);
+
+      // 计算辅助边长
+      let sinX =
+        radius * Math.sin(Math.atan((endY - this.c1py) / (endX - this.c1px)));
+      let cosY =
+        radius * Math.cos(Math.atan((endY - this.c1py) / (endX - this.c1px)));
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.c1px - sinX, this.c1py + cosY);
+      this.ctx.lineTo(this.c1px + sinX, this.c1py - cosY);
+      this.ctx.lineTo(endX + sinX, endY - cosY);
+      this.ctx.lineTo(endX - sinX, endY + cosY);
+      this.ctx.closePath();
+      this.ctx.clip();
+      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+      this.ctx.restore();
+      this.c1px = endX;
+      this.c1py = endY;
+    },
+
+    handleGetContainer() {
+      return this.$refs.box;
+    },
+    // 将字符串转换为首字母大写的形式
+    getInitialCapital(val) {
+      return val.replace(/\S/, item => item.toUpperCase());
     }
   }
 };
@@ -194,6 +298,7 @@ export default {
 
 .adjust-header {
     display: flex;
+    width: 188px;
 }
 
 .adjust-header span {
@@ -207,5 +312,31 @@ export default {
 }
 .ant-row {
     line-height: 36px;
+}
+.color-body {
+    margin-left: 5px;
+    vertical-align: sub;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #000;
+}
+.picker-box {
+  position: absolute;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  bottom: 30px;
+  left: 10px;
+}
+.picker-box .picker-cancel {
+  float: right;
+  height: 20px;
+  line-height: 20px;
+}
+
+.picker-box .vc-chrome {
+  box-shadow: 0 0 0;
 }
 </style>
