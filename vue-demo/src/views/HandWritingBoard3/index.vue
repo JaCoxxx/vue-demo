@@ -517,6 +517,7 @@ export default {
 
 .menu-box div.list-show {
     height: 100%;
+    padding-bottom: 10px;
 }
 
 .menu-box .menu-list {
@@ -532,9 +533,10 @@ export default {
 .menu-box .menu-list .menu-btn {
     display: inline-block;
     width: 20px;
-    height: 25px;
-    padding: 1px 0;
-    line-height: 2px;
+    height: 100%;
+    vertical-align: middle;
+    /* padding: 1px 0; */
+    line-height: 0px;
 }
 .menu-box .menu-list .menu-btn .menu-btn-item {
     display: inline-block;
@@ -546,7 +548,7 @@ export default {
 }
 
 .btn-checked .menu-btn-item:first-child {
-    transform: translateY(6px) rotate(45deg);
+    transform: translateY(7px) rotate(45deg);
 }
 .menu-box .menu-list .btn-checked .menu-btn-item:nth-child(2) {
     display: none;
