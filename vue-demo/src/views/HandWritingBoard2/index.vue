@@ -83,6 +83,7 @@
         还原
       </a-button>
     </div>
+    <div>{{ app }}</div>
   </div>
 </template>
 
@@ -131,6 +132,11 @@ export default {
   watch: {
     pickerColor: function(now) {
       this.lineColor = now.hex8;
+    }
+  },
+  computed: {
+    app() {
+      return navigator.userAgent;
     }
   },
   mounted() {

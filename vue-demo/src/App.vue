@@ -152,13 +152,13 @@ var {
   font-weight: normal;
 }
 a {
-  color: #555;
+  color: #fff;
   text-decoration: none;
 }
 a:hover,
 a:active,
 a:link {
-  color: #000 !important;
+  color: #fff !important;
   text-decoration: underline;
 }
 img {
