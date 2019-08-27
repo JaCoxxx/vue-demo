@@ -291,6 +291,7 @@ export default {
     getInitialCapital(val) {
       return val.replace(/\S/, item => item.toUpperCase());
     },
+    // 撤销
     onUndo() {
       this.boardStatus--;
       if (this.boardStatus >= 0) {
@@ -300,6 +301,7 @@ export default {
         this.$message.info("已经是第一步了");
       }
     },
+    // 还原
     onReduction() {
       this.boardStatus++;
       if (this.boardStatus < this.boardData.length) {
@@ -335,6 +337,7 @@ export default {
   margin: 0 auto;
   padding-top: 10px;
   height: 20%;
+  overflow-y: auto;
 }
 .btn {
   margin: 0 15px;

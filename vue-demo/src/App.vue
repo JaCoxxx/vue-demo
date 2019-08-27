@@ -196,7 +196,7 @@ html {
 html,
 body,
 #app {
-  position: fixed;
+  overscroll-behavior-y: contain;
   width: 100%;
   height: 100%;
 }
