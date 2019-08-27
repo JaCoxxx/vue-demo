@@ -1,89 +1,91 @@
 <template>
   <div ref="box" class="hand-writing">
-    <img v-if="filePath" :src="filePath" alt="" />
-    <canvas
-      v-else
-      ref="writingCanvas"
-      class="writing-box"
-      :width="canvasWidth"
-      :height="canvasHeight"
-      @touchstart="handleSelectTouch($event, 'start')"
-      @touchmove="handleSelectTouch($event, 'move')"
-      @touchend="handleSelectTouch($event, 'end')"
-    >
-    </canvas>
-    <div class="btn-box">
-      <!-- 调节弹框 -->
-      <a-popover
-        v-model="adjustVisible"
-        :arrowPointAtCenter="true"
-        :getPopupContainer="handleGetContainer"
+    <div v-if="!app" style="height: 100%">
+      <img v-if="filePath" :src="filePath" alt="" />
+      <canvas
+        v-else
+        ref="writingCanvas"
+        class="writing-box"
+        :width="canvasWidth"
+        :height="canvasHeight"
+        @touchstart="handleSelectTouch($event, 'start')"
+        @touchmove="handleSelectTouch($event, 'move')"
+        @touchend="handleSelectTouch($event, 'end')"
       >
-        <template slot="title">
-          <div class="adjust-header">
-            <span>调节笔画</span>
-            <a-icon type="close-circle" @click="adjustVisible = false" />
-          </div>
-        </template>
-        <template slot="content">
-          <div class="adjust-content">
-            <a-row>
-              <a-col :span="8">线条粗细</a-col>
-              <a-col :span="16">
-                <a-slider :min="1" :max="20" v-model="lineWidth" />
-              </a-col>
-            </a-row>
-            <a-row>
-              <a-col :span="8">线条颜色</a-col>
-              <a-col :span="16">
-                <div
-                  class="color-body"
-                  :style="{ background: lineColor }"
-                  @click="colorVisible = true"
-                ></div>
-                <div class="picker-box" v-if="colorVisible">
-                  <a-icon
-                    class="picker-cancel"
-                    type="close-circle"
-                    @click="colorVisible = false"
-                  />
-                  <chrome-picker v-model="pickerColor" />
-                </div>
-              </a-col>
-            </a-row>
-          </div>
-        </template>
+      </canvas>
+      <div class="btn-box">
+        <!-- 调节弹框 -->
+        <a-popover
+          v-model="adjustVisible"
+          :arrowPointAtCenter="true"
+          :getPopupContainer="handleGetContainer"
+        >
+          <template slot="title">
+            <div class="adjust-header">
+              <span>调节笔画</span>
+              <a-icon type="close-circle" @click="adjustVisible = false" />
+            </div>
+          </template>
+          <template slot="content">
+            <div class="adjust-content">
+              <a-row>
+                <a-col :span="8">线条粗细</a-col>
+                <a-col :span="16">
+                  <a-slider :min="1" :max="20" v-model="lineWidth" />
+                </a-col>
+              </a-row>
+              <a-row>
+                <a-col :span="8">线条颜色</a-col>
+                <a-col :span="16">
+                  <div
+                    class="color-body"
+                    :style="{ background: lineColor }"
+                    @click="colorVisible = true"
+                  ></div>
+                  <div class="picker-box" v-if="colorVisible">
+                    <a-icon
+                      class="picker-cancel"
+                      type="close-circle"
+                      @click="colorVisible = false"
+                    />
+                    <chrome-picker v-model="pickerColor" />
+                  </div>
+                </a-col>
+              </a-row>
+            </div>
+          </template>
+          <a-button
+            type="primary"
+            class="btn btn-adjust"
+            @click="adjustVisible = true"
+          >
+            调节笔画
+          </a-button>
+        </a-popover>
+
+        <a-button type="primary" class="btn btn-clear" @click="onClear"
+          >清屏</a-button
+        >
+        <a-button type="primary" class="btn btn-generate" @click="onGenerate"
+          >生成</a-button
+        >
         <a-button
           type="primary"
-          class="btn btn-adjust"
-          @click="adjustVisible = true"
+          class="btn btn-switch"
+          style="padding: 0"
+          @click="mouseStatus = mouseStatus === 'brush' ? 'eraser' : 'brush'"
         >
-          调节笔画
+          切换为{{ mouseStatus === "brush" ? "橡皮檫" : "画笔" }}
         </a-button>
-      </a-popover>
-
-      <a-button type="primary" class="btn btn-clear" @click="onClear"
-        >清屏</a-button
-      >
-      <a-button type="primary" class="btn btn-generate" @click="onGenerate"
-        >生成</a-button
-      >
-      <a-button
-        type="primary"
-        class="btn btn-switch"
-        style="padding: 0"
-        @click="mouseStatus = mouseStatus === 'brush' ? 'eraser' : 'brush'"
-      >
-        切换为{{ mouseStatus === "brush" ? "橡皮檫" : "画笔" }}
-      </a-button>
-      <a-button type="primary" class="btn btn-undo" @click="onUndo">
-        撤销
-      </a-button>
-      <a-button type="primary" class="btn btn-reduction" @click="onReduction">
-        还原
-      </a-button>
+        <a-button type="primary" class="btn btn-undo" @click="onUndo">
+          撤销
+        </a-button>
+        <a-button type="primary" class="btn btn-reduction" @click="onReduction">
+          还原
+        </a-button>
+      </div>
     </div>
-    <div>{{ app }}</div>
+    <div v-else>暂不支持QQ浏览器</div>
   </div>
 </template>
 
@@ -136,7 +138,11 @@ export default {
   },
   computed: {
     app() {
-      return navigator.userAgent;
+      if (navigator.userAgent.includes("QQBrowser")) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   mounted() {
