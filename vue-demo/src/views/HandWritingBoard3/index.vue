@@ -111,7 +111,9 @@
             <a-icon type="redo" @click="onReduction" />
           </div>
           <div class="list-item"><a-icon type="delete" @click="onClear" /></div>
-          <div class="list-ite"><a-icon type="save" @click="onGenerate" /></div>
+          <div class="list-item">
+            <a-icon type="save" @click="onGenerate" />
+          </div>
         </div>
       </div>
     </div>
@@ -374,6 +376,9 @@ export default {
       }
     },
     setBoardStatus(data) {
+      if (this.boardStatus < this.boardData.length - 1) {
+        this.boardData = this.boardData.slice(0, this.boardStatus + 1);
+      }
       this.boardData.push(data);
       this.boardStatus += 1;
     },
@@ -382,6 +387,7 @@ export default {
     onClickMenuBtn() {
       this.menuShow = !this.menuShow;
     },
+    // 菜单移动三部曲
     onMenuStart(e) {
       this.menuX = e.touches[0].clientX;
       this.menuY = e.touches[0].clientY;
@@ -390,7 +396,6 @@ export default {
       this.menuShow = false;
       let x = e.touches[0].clientX;
       let y = e.touches[0].clientY;
-      this.handleBorderJudgment();
       this.menuTop += y - this.menuY;
       this.menuLeft += x - this.menuX;
       let _data = this.handleBorderJudgment(this.menuLeft, this.menuTop);
@@ -419,10 +424,12 @@ export default {
         top
       };
     },
+    // 点击画笔
     onClickEdit() {
       this.adjustVisible = true;
       this.mouseStatus = "brush";
     },
+    // 点击橡皮
     onClickEraser() {
       this.eraserVisible = true;
       this.mouseStatus = "eraser";
@@ -445,19 +452,6 @@ export default {
     margin: 0 auto;
     width: 100%;
     height: 100%;
-}
-.btn-box {
-  border-top: 1px solid #000;
-  margin: 0 auto;
-  padding-top: 10px;
-  height: 20%;
-  overflow-y: auto;
-}
-.btn {
-  margin: 0 15px;
-  width: 100px;
-  height: 50px;
-  line-height: 50px;
 }
 
 .adjust-header {
@@ -534,9 +528,8 @@ export default {
     display: inline-block;
     width: 20px;
     height: 100%;
-    vertical-align: middle;
     /* padding: 1px 0; */
-    line-height: 0px;
+    line-height: 3px;
 }
 .menu-box .menu-list .menu-btn .menu-btn-item {
     display: inline-block;
