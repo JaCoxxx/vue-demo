@@ -22,6 +22,14 @@ export default new Vuex.Store({
         source:
           "https://github.com/JaCoxxx/vue-demo/blob/master/vue-demo/src/views/HandWritingBoard2/index.vue",
         phone: true
+      },
+      {
+        name: "手写板3.0",
+        path: "/hand-writing3",
+        description: "移动端手写板插件，相较于2.0大幅度改变了整体样式。",
+        source:
+          "https://github.com/JaCoxxx/vue-demo/blob/master/vue-demo/src/views/HandWritingBoard3/index.vue",
+        phone: true
       }
     ],
     searchList: []
