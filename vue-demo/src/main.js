@@ -11,7 +11,8 @@ import {
   Slider,
   Row,
   Col,
-  Input
+  Input,
+  message
 } from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 
@@ -23,6 +24,8 @@ Vue.use(Slider);
 Vue.use(Row);
 Vue.use(Col);
 Vue.use(Input);
+
+Vue.prototype.$message = message;
 
 Vue.config.productionTip = false;
 

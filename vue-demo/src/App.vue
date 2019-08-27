@@ -196,6 +196,7 @@ html {
 html,
 body,
 #app {
+  position: fixed;
   width: 100%;
   height: 100%;
 }

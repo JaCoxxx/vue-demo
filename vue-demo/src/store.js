@@ -17,7 +17,8 @@ export default new Vuex.Store({
       {
         name: "手写板2.0",
         path: "/hand-writing2",
-        description: "移动端手写板插件，增加更改画笔粗细，画笔颜色功能。",
+        description:
+          "移动端手写板插件，增加更改画笔粗细，画笔颜色，橡皮擦，撤销还原等功能。",
         source:
           "https://github.com/JaCoxxx/vue-demo/blob/master/vue-demo/src/views/HandWritingBoard2/index.vue",
         phone: true

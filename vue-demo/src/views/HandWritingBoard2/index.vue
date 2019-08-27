@@ -76,6 +76,12 @@
       >
         切换为{{ mouseStatus === "brush" ? "橡皮檫" : "画笔" }}
       </a-button>
+      <a-button type="primary" class="btn btn-undo" @click="onUndo">
+        撤销
+      </a-button>
+      <a-button type="primary" class="btn btn-reduction" @click="onReduction">
+        还原
+      </a-button>
     </div>
   </div>
 </template>
@@ -116,7 +122,10 @@ export default {
       adjustVisible: false,
       colorVisible: false,
       // 鼠标状态: brush eraser
-      mouseStatus: "brush"
+      mouseStatus: "brush",
+      // 绘画状态
+      boardData: [],
+      boardStatus: 0
     };
   },
   watch: {
@@ -130,6 +139,8 @@ export default {
   methods: {
     // 画板初始化
     init() {
+      this.boardStatus = -1;
+      this.boardData = [];
       // 获取canvas
       const canvas = this.$refs.writingCanvas;
       this.canvasWidth = canvas.offsetWidth;
@@ -138,6 +149,10 @@ export default {
       this.ctx = canvas.getContext("2d");
       if (this.path !== "") {
         this.filePath = this.path;
+      } else {
+        this.setBoardStatus(
+          this.ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight)
+        );
       }
     },
     // 判断画笔属性
@@ -189,6 +204,9 @@ export default {
     // 停止触摸
     onBrushEnd() {
       this.ctx.closePath();
+      this.setBoardStatus(
+        this.ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight)
+      );
     },
     // 点击取消
     onClear() {
@@ -211,6 +229,7 @@ export default {
       }
     },
 
+    // 橡皮擦移动开始
     onEraserStart(e) {
       this.offsetLeft = e.target.offsetLeft;
       this.offsetTop = e.target.offsetTop;
@@ -222,9 +241,13 @@ export default {
     onEraserMove(e) {
       this.clearLine(e, this.lineWidth / 2);
     },
+    // 橡皮擦移动结束
     onEraserEnd() {
-      console.log("end");
+      this.setBoardStatus(
+        this.ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight)
+      );
     },
+    // 画圆
     clearArc(x, y, radius) {
       this.ctx.save();
       this.ctx.beginPath();
@@ -233,6 +256,7 @@ export default {
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
       this.ctx.restore();
     },
+    // 画矩形
     clearLine(e, radius) {
       this.offsetLeft = e.target.offsetLeft;
       this.offsetTop = e.target.offsetTop;
@@ -259,12 +283,35 @@ export default {
       this.c1py = endY;
     },
 
+    // 挂载DOM
     handleGetContainer() {
       return this.$refs.box;
     },
     // 将字符串转换为首字母大写的形式
     getInitialCapital(val) {
       return val.replace(/\S/, item => item.toUpperCase());
+    },
+    onUndo() {
+      this.boardStatus--;
+      if (this.boardStatus >= 0) {
+        this.ctx.putImageData(this.boardData[this.boardStatus], 0, 0);
+      } else {
+        this.boardStatus++;
+        this.$message.info("已经是第一步了");
+      }
+    },
+    onReduction() {
+      this.boardStatus++;
+      if (this.boardStatus < this.boardData.length) {
+        this.ctx.putImageData(this.boardData[this.boardStatus], 0, 0);
+      } else {
+        this.boardStatus--;
+        this.$message.info("已经是最新的了");
+      }
+    },
+    setBoardStatus(data) {
+      this.boardData.push(data);
+      this.boardStatus += 1;
     }
   }
 };
