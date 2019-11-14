@@ -6,8 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "commit": "git commit -am",
-    "push": "git push origin master && vue-cli-service build",
+    "commit": "vue-cli-service build && git commit -am",
+    "push": "git push origin master",
     "pull": "git pull origin master"
   },
   "dependencies": {
