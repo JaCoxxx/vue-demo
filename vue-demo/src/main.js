@@ -34,3 +34,7 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");
+console.log(
+  "%c ",
+  "padding:112px 150px;background:url('http://returnc.com/frontend/images/console.gif') no-repeat;"
+);

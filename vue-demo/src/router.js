@@ -8,25 +8,25 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: () => import(/* webpackChunkName: "about" */ "./views/Home")
+      component: () => import(/* webpackChunkName: "home" */ "./views/Home")
     },
     {
       path: "/hand-writing",
       name: "handWriting",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/HandWritingBoard")
+        import(/* webpackChunkName: "board1" */ "./views/HandWritingBoard")
     },
     {
       path: "/hand-writing2",
       name: "handWriting2",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/HandWritingBoard2")
+        import(/* webpackChunkName: "board2" */ "./views/HandWritingBoard2")
     },
     {
       path: "/hand-writing3",
       name: "handWriting3",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/HandWritingBoard3")
+        import(/* webpackChunkName: "board3" */ "./views/HandWritingBoard3")
     }
   ]
 });
