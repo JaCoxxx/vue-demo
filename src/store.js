@@ -11,7 +11,7 @@ export default new Vuex.Store({
         path: "/hand-writing",
         description: "移动端手写板插件，无额外功能。",
         source:
-          "https://github.com/JaCoxxx/vue-demo/blob/master/vue-demo/src/views/HandWritingBoard/index.vue",
+          "https://github.com/JaCoxxx/vue-demo/blob/master/src/views/HandWritingBoard/index.vue",
         phone: true
       },
       {
@@ -20,7 +20,7 @@ export default new Vuex.Store({
         description:
           "移动端手写板插件，增加更改画笔粗细，画笔颜色，橡皮擦，撤销还原等功能。",
         source:
-          "https://github.com/JaCoxxx/vue-demo/blob/master/vue-demo/src/views/HandWritingBoard2/index.vue",
+          "https://github.com/JaCoxxx/vue-demo/blob/master/src/views/HandWritingBoard2/index.vue",
         phone: true
       },
       {
@@ -28,7 +28,7 @@ export default new Vuex.Store({
         path: "/hand-writing3",
         description: "移动端手写板插件，相较于2.0大幅度改变了整体样式。",
         source:
-          "https://github.com/JaCoxxx/vue-demo/blob/master/vue-demo/src/views/HandWritingBoard3/index.vue",
+          "https://github.com/JaCoxxx/vue-demo/blob/master/src/views/HandWritingBoard3/index.vue",
         phone: true
       }
     ],
