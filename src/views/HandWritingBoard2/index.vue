@@ -1,7 +1,7 @@
 <template>
   <div ref="box" class="hand-writing">
     <div v-if="!app" style="height: 100%">
-      <img v-if="filePath" :src="filePath" alt="" />
+      <img v-if="filePath" :src="filePath" alt />
       <canvas
         v-else
         ref="writingCanvas"
@@ -11,8 +11,7 @@
         @touchstart="handleSelectTouch($event, 'start')"
         @touchmove="handleSelectTouch($event, 'move')"
         @touchend="handleSelectTouch($event, 'end')"
-      >
-      </canvas>
+      ></canvas>
       <div class="btn-box">
         <!-- 调节弹框 -->
         <a-popover
@@ -54,35 +53,19 @@
               </a-row>
             </div>
           </template>
-          <a-button
-            type="primary"
-            class="btn btn-adjust"
-            @click="adjustVisible = true"
-          >
-            调节笔画
-          </a-button>
+          <a-button type="primary" class="btn btn-adjust" @click="adjustVisible = true">调节笔画</a-button>
         </a-popover>
 
-        <a-button type="primary" class="btn btn-clear" @click="onClear"
-          >清屏</a-button
-        >
-        <a-button type="primary" class="btn btn-generate" @click="onGenerate"
-          >生成</a-button
-        >
+        <a-button type="primary" class="btn btn-clear" @click="onClear">清屏</a-button>
+        <a-button type="primary" class="btn btn-generate" @click="onGenerate">生成</a-button>
         <a-button
           type="primary"
           class="btn btn-switch"
           style="padding: 0"
           @click="mouseStatus = mouseStatus === 'brush' ? 'eraser' : 'brush'"
-        >
-          切换为{{ mouseStatus === "brush" ? "橡皮檫" : "画笔" }}
-        </a-button>
-        <a-button type="primary" class="btn btn-undo" @click="onUndo">
-          撤销
-        </a-button>
-        <a-button type="primary" class="btn btn-reduction" @click="onReduction">
-          还原
-        </a-button>
+        >切换为{{ mouseStatus === "brush" ? "橡皮檫" : "画笔" }}</a-button>
+        <a-button type="primary" class="btn btn-undo" @click="onUndo">撤销</a-button>
+        <a-button type="primary" class="btn btn-reduction" @click="onReduction">还原</a-button>
       </div>
     </div>
     <div v-else>暂不支持QQ浏览器</div>
@@ -333,16 +316,16 @@ export default {
 
 <style lang="css" scoped>
 .hand-writing {
-    width: 100%;
-    height: 100%;
-    background: #fff;
+  width: 100%;
+  height: 100%;
+  background: #fff;
 }
 
 .writing-box {
-    display: block;
-    margin: 0 auto;
-    width: 100%;
-    height: 80%;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: 80%;
 }
 .btn-box {
   border-top: 1px solid #000;
@@ -359,30 +342,30 @@ export default {
 }
 
 .adjust-header {
-    display: flex;
-    width: 188px;
+  display: flex;
+  width: 188px;
 }
 
 .adjust-header span {
-    flex: 1;
+  flex: 1;
 }
 
-.adjust-header .anticon{
-    flex: 1;
-    text-align: right;
-    line-height: 21px;
+.adjust-header .anticon {
+  flex: 1;
+  text-align: right;
+  line-height: 21px;
 }
 .ant-row {
-    line-height: 36px;
+  line-height: 36px;
 }
 .color-body {
-    margin-left: 5px;
-    vertical-align: sub;
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #000;
+  margin-left: 5px;
+  vertical-align: sub;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #000;
 }
 .picker-box {
   position: absolute;

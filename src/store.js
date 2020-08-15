@@ -30,6 +30,16 @@ export default new Vuex.Store({
         source:
           "https://github.com/JaCoxxx/vue-demo/blob/master/src/views/HandWritingBoard3/index.vue",
         phone: true
+      },
+      {
+        name: "惊喜",
+        path: "/happy-birthday",
+        description: "生日快乐贺卡",
+        color: 'red',
+        noHeader: true,
+        // source:
+        //   "https://github.com/JaCoxxx/vue-demo/blob/master/src/views/happyBirthday/index.vue",
+        phone: true
       }
     ],
     searchList: []

@@ -1,7 +1,7 @@
 <template>
   <div ref="box" class="hand-writing">
     <div v-if="!app" style="height: 100%">
-      <img v-if="filePath" :src="filePath" alt="" />
+      <img v-if="filePath" :src="filePath" alt />
       <canvas
         v-else
         ref="writingCanvas"
@@ -11,8 +11,7 @@
         @touchstart="handleSelectTouch($event, 'start')"
         @touchmove="handleSelectTouch($event, 'move')"
         @touchend="handleSelectTouch($event, 'end')"
-      >
-      </canvas>
+      ></canvas>
       <div
         class="menu-box"
         :style="{ top: `${menuTop}px`, left: `${menuLeft}px` }"
@@ -21,19 +20,12 @@
         @touchend="onMenuEnd($event)"
       >
         <div :class="{ 'list-show': menuShow }" class="menu-list">
-          <div
-            :class="{ 'btn-checked': menuShow }"
-            class="menu-btn"
-            @click="onClickMenuBtn"
-          >
+          <div :class="{ 'btn-checked': menuShow }" class="menu-btn" @click="onClickMenuBtn">
             <span class="menu-btn-item"></span>
             <span class="menu-btn-item"></span>
             <span class="menu-btn-item"></span>
           </div>
-          <div
-            :class="{ 'item-checked': mouseStatus === 'brush' }"
-            class="list-item"
-          >
+          <div :class="{ 'item-checked': mouseStatus === 'brush' }" class="list-item">
             <a-popover
               v-model="adjustVisible"
               placement="right"
@@ -77,10 +69,7 @@
               <a-icon type="edit" @click="onClickEdit" />
             </a-popover>
           </div>
-          <div
-            :class="{ 'item-checked': mouseStatus === 'eraser' }"
-            class="list-item"
-          >
+          <div :class="{ 'item-checked': mouseStatus === 'eraser' }" class="list-item">
             <a-popover
               v-model="eraserVisible"
               placement="right"
@@ -106,11 +95,15 @@
               <icon-font type="icon-eraser" @click="onClickEraser" />
             </a-popover>
           </div>
-          <div class="list-item"><a-icon type="undo" @click="onUndo" /></div>
+          <div class="list-item">
+            <a-icon type="undo" @click="onUndo" />
+          </div>
           <div class="list-item">
             <a-icon type="redo" @click="onReduction" />
           </div>
-          <div class="list-item"><a-icon type="delete" @click="onClear" /></div>
+          <div class="list-item">
+            <a-icon type="delete" @click="onClear" />
+          </div>
           <div class="list-item">
             <a-icon type="save" @click="onGenerate" />
           </div>
@@ -440,45 +433,45 @@ export default {
 
 <style lang="css" scoped>
 .hand-writing {
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 38px);
-    background: #fff;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 38px);
+  background: #fff;
+  overflow: hidden;
 }
 
 .writing-box {
-    display: block;
-    margin: 0 auto;
-    width: 100%;
-    height: 100%;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
 }
 
 .adjust-header {
-    display: flex;
-    width: 188px;
+  display: flex;
+  width: 188px;
 }
 
 .adjust-header span {
-    flex: 1;
+  flex: 1;
 }
 
-.adjust-header .anticon{
-    flex: 1;
-    text-align: right;
-    line-height: 21px;
+.adjust-header .anticon {
+  flex: 1;
+  text-align: right;
+  line-height: 21px;
 }
 .ant-row {
-    line-height: 36px;
+  line-height: 36px;
 }
 .color-body {
-    margin-left: 5px;
-    vertical-align: sub;
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #000;
+  margin-left: 5px;
+  vertical-align: sub;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #000;
 }
 .picker-box {
   position: fixed;
@@ -500,63 +493,63 @@ export default {
 
 /* 伸缩菜单 */
 .menu-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    width: auto;
-    height: auto;
-    background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: auto;
+  height: auto;
+  background: #fff;
 }
 
 .menu-box div.list-show {
-    height: 100%;
-    padding-bottom: 10px;
+  height: 100%;
+  padding-bottom: 10px;
 }
 
 .menu-box .menu-list {
-    padding-bottom: 10px;
-    width: 35px;
-    height: 27px;
-    border: 1px solid #000;
-    border-radius: 5px;
-    text-align: center;
-    overflow: hidden;
+  padding-bottom: 10px;
+  width: 35px;
+  height: 27px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  text-align: center;
+  overflow: hidden;
 }
 
 .menu-box .menu-list .menu-btn {
-    display: inline-block;
-    width: 20px;
-    height: 100%;
-    /* padding: 1px 0; */
-    line-height: 3px;
+  display: inline-block;
+  width: 20px;
+  height: 100%;
+  /* padding: 1px 0; */
+  line-height: 3px;
 }
 .menu-box .menu-list .menu-btn .menu-btn-item {
-    display: inline-block;
-    width: 20px;
-    height: 2px;
-    background: #666;
-    border-radius: 5px;
-    transition: transform .5s;
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  background: #666;
+  border-radius: 5px;
+  transition: transform 0.5s;
 }
 
 .btn-checked .menu-btn-item:first-child {
-    transform: translateY(7px) rotate(45deg);
+  transform: translateY(7px) rotate(45deg);
 }
 .menu-box .menu-list .btn-checked .menu-btn-item:nth-child(2) {
-    display: none;
+  display: none;
 }
 .btn-checked .menu-btn-item:last-child {
-    transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 .menu-box .menu-list .list-item {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    border-radius: 5px;
-    margin-top: 5px;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  margin-top: 5px;
 }
 .item-checked {
-    border: 1px solid #000;
+  border: 1px solid #000;
 }
 </style>

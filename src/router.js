@@ -27,6 +27,12 @@ export default new Router({
       name: "handWriting3",
       component: () =>
         import(/* webpackChunkName: "board3" */ "./views/HandWritingBoard3")
+    },
+    {
+      path: "/happy-birthday",
+      name: "happyBirthday",
+      component: () =>
+        import(/* webpackChunkName: "happyBirthday" */ "./views/HappyBirthday")
     }
   ]
 });

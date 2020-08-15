@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="header">
+    <div v-if="!header.noHeader" class="header" :style="{background: header.color || '#000'}">
       <div v-if="!search">
         <a-icon v-if="!header.home" class="icon" type="left" @click="goBack" />
         <span>{{ header.name }}</span>
@@ -28,6 +28,7 @@
         <span class="cancel" @click="onCancel">取消</span>
       </div>
     </div>
+    <div v-if="!header.noHeader" style="width:100%;height:38px;"></div>
     <div class="body">
       <router-view />
     </div>
@@ -196,18 +197,21 @@ html {
 html,
 body,
 #app {
-  overscroll-behavior-y: contain;
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 100%;
 }
 .header {
-  position: relative;
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 38px;
-  background: #000;
   color: #fff;
   text-align: center;
   line-height: 38px;
+  z-index: 999;
 }
 .icon {
   color: #fff;
@@ -234,6 +238,7 @@ body,
   width: 100%;
   height: calc(100vh - 38px);
   overflow-y: auto;
+  overscroll-behavior-y: contain; /* 组织滚动链接 */
 }
 .header .ant-input-search .ant-input {
   border: 0;

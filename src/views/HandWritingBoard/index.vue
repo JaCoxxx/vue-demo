@@ -1,6 +1,6 @@
 <template>
   <div class="hand-writing">
-    <img v-if="filePath" :src="filePath" alt="" />
+    <img v-if="filePath" :src="filePath" alt />
     <canvas
       v-else
       ref="writingCanvas"
@@ -10,8 +10,7 @@
       @touchstart="onStart"
       @touchmove="onMove"
       @touchend="onEnd"
-    >
-    </canvas>
+    ></canvas>
     <div class="btn-box">
       <div class="btn btn-clear" @click="onClear">清屏</div>
       <div class="btn btn-generate" @click="onGenerate">生成</div>
@@ -123,17 +122,17 @@ export default {
 
 <style lang="css" scoped>
 .hand-writing {
-    width: 100%;
-    height: 100%;
-    background: #fff;
+  width: 100%;
+  height: 100%;
+  background: #fff;
 }
 
 .writing-box {
-    display: block;
-    margin: 0 auto;
-    width: 100%;
-    height: 80%;
-    background: #ccc;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: 80%;
+  background: #ccc;
 }
 .btn-box {
   margin: 0 auto;
