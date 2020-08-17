@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <div v-if="!header.noHeader" class="header" :style="{background: header.color || '#000'}">
+    <div
+      v-if="!header.noHeader"
+      class="header"
+      :style="{ background: header.color || '#000' }"
+    >
       <div v-if="!search">
         <a-icon v-if="!header.home" class="icon" type="left" @click="goBack" />
         <span>{{ header.name }}</span>
@@ -29,7 +33,10 @@
       </div>
     </div>
     <div v-if="!header.noHeader" style="width:100%;height:38px;"></div>
-    <div class="body">
+    <div
+      class="body"
+      :style="{ height: header.noHeader ? '100%' : 'calc(100vh - 38px)' }"
+    >
       <router-view />
     </div>
   </div>
